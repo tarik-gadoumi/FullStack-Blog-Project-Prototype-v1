@@ -71,12 +71,12 @@ const BtnAndSpinner = styled.div({
 BtnAndSpinner.defaultProps ={
   'aria-label' :'Loading'
 }
-const Input = styled.input({
-    borderRadius: '3px',
-    border: `1px solid ${style.border}`,
-    background: style.ghostWhite,
-    padding: '8px 12px',
-  })
+// const Input = styled.input({
+//     borderRadius: '3px',
+//     border: `1px solid ${style.border}`,
+//     background: style.ghostWhite,
+//     padding: '8px 12px',
+//   })
  const FormGroup = styled.div({
     display: 'flex',
     flexDirection: 'column',
@@ -162,10 +162,18 @@ const Input = styled.input({
       textDecoration: 'underline',
     },
   })
+  const inputStyles = {
+    border: '1px solid #f1f1f4',
+    background: '#f1f2f7',
+    padding: '8px 12px',
+  }
   
+  const Input = styled.input({borderRadius: '3px'}, inputStyles)
+  const Textarea = styled.textarea(inputStyles)
 export {
   PostsListUL,
   Input,
+  Textarea,
   Button,
   FormGroup,
   DialogContent,

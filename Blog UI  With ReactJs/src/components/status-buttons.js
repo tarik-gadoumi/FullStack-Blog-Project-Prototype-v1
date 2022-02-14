@@ -64,7 +64,13 @@ function StatusButtons(props) {
         postId: props.postId,
         post: props.post,
       }),
-    { onSettled: () => queryClient.invalidateQueries("list-items") }
+      {
+        onSettled: () => {
+          queryClient.invalidateQueries("list-items");
+          queryClient.invalidateQueries("Reading-items");
+          queryClient.invalidateQueries("Finished-items");
+        }
+      },
   );
   const { mutate: Update } = useMutation(
     ({ finishDate }) =>

@@ -72,7 +72,7 @@ app.get("/filtredlist", (req, res) => {
     .then((result) => {
       // console.log(result)
       res.status(200).send(result);
-      console.log(result);
+      //console.log(result);
       maQuery.query?.length > 0 || maQuery.query === ""
         ? delete maQuery.query
         : void 0;

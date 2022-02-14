@@ -15,8 +15,10 @@ function ReadingListScreen({ user }) {
 
   return ReadingItems?.length > 0 ? (
     <PostsListUL css={{ marginTop: 20 }}>
-      {ReadingItems.map((obj) => {
-        const post = JSON.parse(obj.post);
+      {ReadingItems.map( (obj) => {
+
+        const post =  JSON.parse(obj.post);
+    
         return (
           <li key={obj.id} aria-label={post.title}>
             <PostRow key={obj.id} post={post} user={user} />
