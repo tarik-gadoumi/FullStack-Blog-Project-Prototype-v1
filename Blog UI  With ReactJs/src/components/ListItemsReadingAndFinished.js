@@ -11,7 +11,6 @@ function ListItemsList({ user, noListItems, noFilteredListItems, callback }) {
         (data) => data.data.data
       ),
   });
-  console.log(listItems);
   const filteredListItems = listItems?.filter(callback);
 
   if (!listItems?.length) {

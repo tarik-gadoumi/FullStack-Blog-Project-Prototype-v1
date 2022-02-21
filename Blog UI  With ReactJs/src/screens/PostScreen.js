@@ -3,15 +3,19 @@
 import { jsx } from "@emotion/react";
 import * as React from "react";
 import { useParams } from "react-router";
-import { clientGetPosts, clientGetUserAllPosts,clientUpdateUserTargetedPost } from "../utils/api-client";
+import {
+  clientGetPosts,
+  clientGetUserAllPosts,
+  clientUpdateUserTargetedPost,
+} from "../utils/api-client";
 import * as mq from "../styles/mq";
-import { useAsync } from "../utils/hooks";
+//import { useAsync } from "../utils/hooks";
 import { StatusButtons } from "../components/status-buttons";
 import { Rating } from "../components/rating";
-import { useQuery,useMutation,useQueryClient } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import postsPlaceholderSvg from "../assets/posts-placeholder.svg";
-import debounceFn from 'debounce-fn'
-import { Textarea} from "../components/lib";
+import debounceFn from "debounce-fn";
+import { Textarea } from "../components/lib";
 const loadingPosts = {
   title: "Loading...",
   author: "loading...",
@@ -30,8 +34,8 @@ function PostScreen({ user }) {
         (data) => data.data.data
       ),
   });
-  const { data: targetedPost=loadingPosts } = useQuery({
-    queryKey: ["targeted-post",postId],
+  const { data: targetedPost = loadingPosts } = useQuery({
+    queryKey: ["targeted-post", postId],
     queryFn: () =>
       clientGetPosts(`posts/${postId}`, { token: user.token }).then(
         (data) => data.data.data
@@ -43,7 +47,8 @@ function PostScreen({ user }) {
   // React.useEffect(() => {
   //   run(clientGetPosts(`posts/${postId}`, { token: user.token }));
   // }, [run, user.token, postId]);
-  const { title, author, coverImageUrl, content, updated_at, created_at } = targetedPost ;
+  const { title, author, coverImageUrl, content, updated_at, created_at } =
+    targetedPost;
   return (
     <div>
       <div
@@ -78,7 +83,7 @@ function PostScreen({ user }) {
                 height: "100%",
               }}
             >
-              <StatusButtons user={user} postId={postId} post={targetedPost}/>
+              <StatusButtons user={user} postId={postId} post={targetedPost} />
             </div>
             <div css={{ flex: 1, justifyContent: "space-between" }}>
               <h1>{title}</h1>
@@ -109,29 +114,30 @@ function PostScreen({ user }) {
     </div>
   );
 }
-function NotesTextarea({listItem, user}) {
+function NotesTextarea({ listItem, user }) {
   const { postId } = useParams();
   const queryClient = useQueryClient();
-  const {mutate} = useMutation(
-    updates =>
-    clientUpdateUserTargetedPost({
+  const { mutate } = useMutation(
+    (updates) =>
+      clientUpdateUserTargetedPost({
         token: user.token,
         postId: postId,
-        data: updates, 
+        data: updates,
       }),
-      {
-        onSettled: () => {
-          queryClient.invalidateQueries("list-items");
-          queryClient.invalidateQueries("Reading-items");
-          queryClient.invalidateQueries("Finished-items");
-        },
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries("list-items");
+        queryClient.invalidateQueries("targeted-post");
+        queryClient.invalidateQueries("user-List-items");
       },
-  )
-  const debouncedMutate = React.useMemo(() => debounceFn(mutate, {wait: 300}), [
-    mutate,
-  ])
+    }
+  );
+  const debouncedMutate = React.useMemo(
+    () => debounceFn(mutate, { wait: 300 }),
+    [mutate]
+  );
   function handleNotesChange(e) {
-    debouncedMutate({notes: e.target.value})
+    debouncedMutate({ notes: e.target.value });
   }
 
   return (
@@ -140,11 +146,11 @@ function NotesTextarea({listItem, user}) {
         <label
           htmlFor="notes"
           css={{
-            display: 'inline-block',
+            display: "inline-block",
             marginRight: 10,
-            marginTop: '0',
-            marginBottom: '0.5rem',
-            fontWeight: 'bold',
+            marginTop: "0",
+            marginBottom: "0.5rem",
+            fontWeight: "bold",
           }}
         >
           Notes
@@ -154,10 +160,10 @@ function NotesTextarea({listItem, user}) {
         id="notes"
         defaultValue={listItem.notes}
         onChange={handleNotesChange}
-        css={{width: '100%', minHeight: 300}}
+        css={{ width: "100%", minHeight: 300 }}
       />
     </React.Fragment>
-  )
+  );
 }
 
 export { PostScreen };
