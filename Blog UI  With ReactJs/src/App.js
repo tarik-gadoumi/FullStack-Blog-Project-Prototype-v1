@@ -6,6 +6,7 @@ import * as auth from "./utils/auth-provider";
 import { useAsync } from "./utils/hooks";
 import { clientGetUser } from "./utils/api-client";
 import { FullPageSpinner } from "./components/lib";
+import { useQueryClient } from "react-query";
 
 async function isThereUser() {
   let userFromResponse = null;
@@ -26,6 +27,8 @@ async function isThereUser() {
   return userFromResponse;
 }
 function App() {
+  const queryClient = useQueryClient();
+  //console.log(queryClient);
   const {
     data: user,
     error,
@@ -46,6 +49,7 @@ function App() {
   const logout = () => {
     auth.logout();
     setData(null);
+    queryClient.clear();
   };
   if (isLoading || isIdle) {
     return <FullPageSpinner />;

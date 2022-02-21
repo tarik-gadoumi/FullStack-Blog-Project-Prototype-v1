@@ -49,7 +49,7 @@ function TooltipButton({ label, highlight, onClick, icon, ...rest }) {
 }
 function StatusButtons(props) {
   const queryClient = useQueryClient();
-  console.log(queryClient);
+  //console.log(queryClient);
   const { data: listItems } = useQuery({
     queryKey: "list-items",
     queryFn: () =>
@@ -67,8 +67,6 @@ function StatusButtons(props) {
     {
       onSettled: () => {
         queryClient.invalidateQueries("list-items");
-        // queryClient.invalidateQueries("Reading-items");
-        // queryClient.invalidateQueries("Finished-items");
         queryClient.invalidateQueries("targeted-post");
         queryClient.invalidateQueries("user-List-items");
       },
@@ -84,8 +82,6 @@ function StatusButtons(props) {
     {
       onSettled: () => {
         queryClient.invalidateQueries("list-items");
-        // queryClient.invalidateQueries("Reading-items");
-        // queryClient.invalidateQueries("Finished-items");
         queryClient.invalidateQueries("targeted-post");
         queryClient.invalidateQueries("user-List-items");
       },
@@ -100,8 +96,6 @@ function StatusButtons(props) {
     {
       onSettled: () => {
         queryClient.invalidateQueries("list-items");
-        // queryClient.invalidateQueries("Reading-items");
-        // queryClient.invalidateQueries("Finished-items");
         queryClient.invalidateQueries("targeted-post");
         queryClient.invalidateQueries("user-List-items");
       },
