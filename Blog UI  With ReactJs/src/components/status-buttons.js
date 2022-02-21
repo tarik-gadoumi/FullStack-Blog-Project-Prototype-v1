@@ -67,8 +67,8 @@ function StatusButtons(props) {
     {
       onSettled: () => {
         queryClient.invalidateQueries("list-items");
-        queryClient.invalidateQueries("Reading-items");
-        queryClient.invalidateQueries("Finished-items");
+        // queryClient.invalidateQueries("Reading-items");
+        // queryClient.invalidateQueries("Finished-items");
         queryClient.invalidateQueries("user-List-items");
       },
     }
@@ -83,8 +83,8 @@ function StatusButtons(props) {
     {
       onSettled: () => {
         queryClient.invalidateQueries("list-items");
-        queryClient.invalidateQueries("Reading-items");
-        queryClient.invalidateQueries("Finished-items");
+        // queryClient.invalidateQueries("Reading-items");
+        // queryClient.invalidateQueries("Finished-items");
         queryClient.invalidateQueries("user-List-items");
       },
     }
@@ -98,8 +98,8 @@ function StatusButtons(props) {
     {
       onSettled: () => {
         queryClient.invalidateQueries("list-items");
-        queryClient.invalidateQueries("Reading-items");
-        queryClient.invalidateQueries("Finished-items");
+        // queryClient.invalidateQueries("Reading-items");
+        // queryClient.invalidateQueries("Finished-items");
         queryClient.invalidateQueries("user-List-items");
       },
     }
