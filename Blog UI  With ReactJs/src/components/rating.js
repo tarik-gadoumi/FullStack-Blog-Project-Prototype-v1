@@ -48,7 +48,6 @@ function Rating({ listItem, user, postId }) {
   }, []);
 
   const rootClassName = `list-item-${listItem.id}`;
-
   const hearts = Array.from({ length: 5 }).map((x, i) => {
     const ratingId = `rating-${listItem.id}-${i}`;
     const ratingValue = i + 1;

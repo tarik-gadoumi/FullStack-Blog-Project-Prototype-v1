@@ -64,13 +64,14 @@ function StatusButtons(props) {
         postId: props.postId,
         post: props.post,
       }),
-      {
-        onSettled: () => {
-          queryClient.invalidateQueries("list-items");
-          queryClient.invalidateQueries("Reading-items");
-          queryClient.invalidateQueries("Finished-items");
-        }
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries("list-items");
+        queryClient.invalidateQueries("Reading-items");
+        queryClient.invalidateQueries("Finished-items");
+        queryClient.invalidateQueries("user-List-items");
       },
+    }
   );
   const { mutate: Update } = useMutation(
     ({ finishDate }) =>
@@ -84,6 +85,7 @@ function StatusButtons(props) {
         queryClient.invalidateQueries("list-items");
         queryClient.invalidateQueries("Reading-items");
         queryClient.invalidateQueries("Finished-items");
+        queryClient.invalidateQueries("user-List-items");
       },
     }
   );
@@ -98,6 +100,7 @@ function StatusButtons(props) {
         queryClient.invalidateQueries("list-items");
         queryClient.invalidateQueries("Reading-items");
         queryClient.invalidateQueries("Finished-items");
+        queryClient.invalidateQueries("user-List-items");
       },
     }
   );
