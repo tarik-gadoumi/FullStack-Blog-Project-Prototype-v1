@@ -40,9 +40,10 @@ function ReadingListScreen({ user }) {
       callback={(li) => !li.finishDate}
       noListItems={
         <p>
-          Hey there! Welcome to your bookshelf reading list. Get started by
-          heading over to <Link to="/discover">the Discover page</Link> to add
-          Posts to your list.
+          Hey there! Welcome to your e-learning plateforme reading list. Get
+          started by heading over to{" "}
+          <Link to="/discover">the Discover page</Link> to add Posts to your
+          list.
         </p>
       }
       noFilteredListItems={
