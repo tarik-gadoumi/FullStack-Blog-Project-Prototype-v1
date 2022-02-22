@@ -7,28 +7,18 @@ import "@reach/tooltip/styles.css";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { Input, PostsListUL, Spinner, FullPageSpinner } from "./lib";
 import { PostRow } from "./post-row";
-import { client, clientFilter } from "../utils/api-client";
-// import { useAsync } from "../utils/hooks";
-import { useQuery } from "react-query";
+
+import { usePostSearch, useAllPosts } from "../utils/PostHooks";
+
 function DiscoverPostsScreen({ user }) {
   const [query, setQuery] = React.useState("");
   const [error, setError] = React.useState();
   const [queried, setQueried] = React.useState(false);
-
-  const { data: allItems, status: statusAll } = useQuery({
-    queryKey: "NonFiltred-items",
-    queryFn: () => client().then((data) => data.data.data),
-    onError: (error) => console.log(error),
-  });
-  const { data: filtred, status: statusFiltred } = useQuery({
-    queryKey: ["filtred-items", query],
-    queryFn: () => clientFilter(query).then((data) => data.data),
-    enabled: !!query,
-    onError: (error) => setError(error.response.data.message),
-  });
+  const { filtred, statusFiltred } = usePostSearch(query, setError);
+  const { allItems, statusAll } = useAllPosts(setError);
   let status;
   let data;
-
+  console.log(data, status);
   function loadAllItems() {
     status = statusAll;
     data = allItems;
@@ -39,8 +29,7 @@ function DiscoverPostsScreen({ user }) {
   }
 
   queried && query !== "" ? loadFiltredItems() : loadAllItems();
-
-  //console.log(data,status);
+  console.log(data, status);
 
   function handleSearchSubmit(event) {
     event.preventDefault();
@@ -87,6 +76,32 @@ function DiscoverPostsScreen({ user }) {
         </div>
       ) : null}
       {status === "loading" || status === "idle" ? <FullPageSpinner /> : null}
+      {queried && query !== "" ? null : (
+        <div
+          css={{
+            marginTop: 20,
+            fontSize: "1.2em",
+            textAlign: "center",
+            color: "white",
+            background: " rgba(0,0,0,.75)",
+            borderRadius: "1%",
+            border: "2px black dotted",
+          }}
+        >
+          <p>Welcome to the discover page.</p>
+          <p>Here, let me load a few posts for you...</p>
+          {status === "loading" ? (
+            <div css={{ width: "100%", margin: "auto" }}>
+              <Spinner />
+            </div>
+          ) : status === "success" && data?.length ? (
+            <p>
+              <span css={{ color: "gold" }}>Here you go!</span> Find more posts
+              with the search bar above.
+            </p>
+          ) : null}
+        </div>
+      )}
       {status === "success" ? (
         data?.length ? (
           <PostsListUL css={{ marginTop: 20 }}>

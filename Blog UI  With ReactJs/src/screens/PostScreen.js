@@ -3,50 +3,21 @@
 import { jsx } from "@emotion/react";
 import * as React from "react";
 import { useParams } from "react-router";
-import {
-  clientGetPosts,
-  clientGetUserAllPosts,
-  clientUpdateUserTargetedPost,
-} from "../utils/api-client";
+import { clientUpdateUserTargetedPost } from "../utils/api-client";
 import * as mq from "../styles/mq";
-//import { useAsync } from "../utils/hooks";
 import { StatusButtons } from "../components/status-buttons";
 import { Rating } from "../components/rating";
-import { useQuery, useMutation, useQueryClient } from "react-query";
-import postsPlaceholderSvg from "../assets/posts-placeholder.svg";
+import { useMutation, useQueryClient } from "react-query";
 import debounceFn from "debounce-fn";
 import { Textarea } from "../components/lib";
-const loadingPosts = {
-  title: "Loading...",
-  author: "loading...",
-  coverImageUrl: postsPlaceholderSvg,
-  content: "Loading content...",
-  loadingBook: true,
-};
+import { useUserPosts, usePost } from "../utils/PostHooks";
 
 function PostScreen({ user }) {
   const { postId } = useParams();
-  //const { data, run } = useAsync();
-  const { data: listItems } = useQuery({
-    queryKey: "list-items",
-    queryFn: () =>
-      clientGetUserAllPosts({ token: user.token }).then(
-        (data) => data.data.data
-      ),
-  });
-  const { data: targetedPost = loadingPosts } = useQuery({
-    queryKey: ["targeted-post", postId],
-    queryFn: () =>
-      clientGetPosts(`posts/${postId}`, { token: user.token }).then(
-        (data) => data.data.data
-      ),
-  });
+  const { listItems } = useUserPosts(user);
+  const { targetedPost } = usePost(user, postId);
   const listItem =
     listItems?.find((v) => parseInt(v.post_id) === parseInt(postId)) ?? null;
-
-  // React.useEffect(() => {
-  //   run(clientGetPosts(`posts/${postId}`, { token: user.token }));
-  // }, [run, user.token, postId]);
   const { title, author, coverImageUrl, content, updated_at, created_at } =
     targetedPost;
   return (
@@ -108,7 +79,7 @@ function PostScreen({ user }) {
           <p>{content}</p>
         </div>
       </div>
-      {!targetedPost.loadingBook && listItem ? (
+      {!targetedPost.loadingPost && listItem ? (
         <NotesTextarea user={user} listItem={listItem} />
       ) : null}
     </div>

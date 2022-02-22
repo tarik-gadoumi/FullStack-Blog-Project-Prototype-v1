@@ -1,22 +1,21 @@
 html {
-	padding: 0;
-	margin: 0;
-	font-family: arial;
-	height: 100%;
-	color: #999;
+  padding: 0;
+  margin: 0;
+  font-family: arial;
+  height: 100%;
+  color: black;
 }
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 body {
-	padding: 0;
-	margin: 0;
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	background-image: url('./img/background.jpg');
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* background-image: url('./img/background.jpg');
 	background-size: cover;
-	background-position: center;
-
+	background-position: center; */
+  background-color: #e85835;
 }
-
