@@ -5,7 +5,7 @@ import * as React from "react";
 import { Tooltip } from "@reach/tooltip";
 import "@reach/tooltip/styles.css";
 import { FaSearch, FaTimes } from "react-icons/fa";
-import { Input, PostsListUL, Spinner, FullPageSpinner } from "./lib";
+import { Input, PostsListUL, Spinner } from "./lib";
 import { PostRow } from "./post-row";
 
 import { usePostSearch, useAllPosts } from "../utils/PostHooks";
@@ -18,7 +18,6 @@ function DiscoverPostsScreen({ user }) {
   const { allItems, statusAll } = useAllPosts(setError);
   let status;
   let data;
-  console.log(data, status);
   function loadAllItems() {
     status = statusAll;
     data = allItems;
@@ -29,7 +28,6 @@ function DiscoverPostsScreen({ user }) {
   }
 
   queried && query !== "" ? loadFiltredItems() : loadAllItems();
-  console.log(data, status);
 
   function handleSearchSubmit(event) {
     event.preventDefault();
@@ -75,7 +73,7 @@ function DiscoverPostsScreen({ user }) {
           <pre>{error}</pre>
         </div>
       ) : null}
-      {status === "loading" || status === "idle" ? <FullPageSpinner /> : null}
+      {/* {status === "loading" || status === "idle" ? <FullPageSpinner /> : null} */}
       {queried && query !== "" ? null : (
         <div
           css={{
@@ -91,10 +89,10 @@ function DiscoverPostsScreen({ user }) {
           <p>Welcome to the discover page.</p>
           <p>Here, let me load a few posts for you...</p>
           {status === "loading" ? (
-            <div css={{ width: "100%", margin: "auto" }}>
+            <div css={{ width: "100%", margin: "auto", color: "yellow" }}>
               <Spinner />
             </div>
-          ) : status === "success" && data?.length ? (
+          ) : status === "success" && data.length ? (
             <p>
               <span css={{ color: "gold" }}>Here you go!</span> Find more posts
               with the search bar above.

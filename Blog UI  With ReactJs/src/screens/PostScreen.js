@@ -15,7 +15,7 @@ import { useUserPosts, usePost } from "../utils/PostHooks";
 function PostScreen({ user }) {
   const { postId } = useParams();
   const { listItems } = useUserPosts(user);
-  const { targetedPost } = usePost(user, postId);
+  const targetedPost = usePost(user, postId);
   const listItem =
     listItems?.find((v) => parseInt(v.post_id) === parseInt(postId)) ?? null;
   const { title, author, coverImageUrl, content, updated_at, created_at } =

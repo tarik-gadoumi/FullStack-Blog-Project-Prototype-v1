@@ -53,14 +53,14 @@ function useUserPosts(user) {
   };
 }
 function usePost(user, postId) {
-  const { data: targetedPost = loadingPost } = useQuery({
+  const { data: targetedPost } = useQuery({
     queryKey: ["targeted-post", postId],
     queryFn: () =>
       clientGetPosts(`posts/${postId}`, { token: user.token }).then(
         (data) => data.data.data
       ),
   });
-  return { targetedPost };
+  return targetedPost ?? loadingPost;
 }
 
 export { usePostSearch, useAllPosts, useUserPosts, usePost };
