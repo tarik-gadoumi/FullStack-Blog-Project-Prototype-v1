@@ -7,7 +7,6 @@ import "@reach/tooltip/styles.css";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { Input, PostsListUL, Spinner } from "./lib";
 import { PostRow } from "./post-row";
-
 import { usePostSearch, useAllPosts } from "../utils/PostHooks";
 
 function DiscoverPostsScreen({ user }) {
@@ -97,6 +96,8 @@ function DiscoverPostsScreen({ user }) {
               <span css={{ color: "gold" }}>Here you go!</span> Find more posts
               with the search bar above.
             </p>
+          ) : status === "success" && !data.length ? (
+            <p>Hmmm... I couldn't find any books to suggest for you. Sorry.</p>
           ) : null}
         </div>
       )}

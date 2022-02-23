@@ -11,16 +11,11 @@ import {
 } from "react-icons/fa";
 import "@reach/tooltip/styles.css";
 import Tooltip from "@reach/tooltip";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { useAsync } from "../utils/hooks";
 import { CircleButton, Spinner } from "./lib";
-import {
-  clientCreateReadingOrFinishedPosts,
-  clientGetUserAllPosts,
-  clientRemoveUserTargetedPost,
-  clientUpdateUserTargetedPost,
-} from "../utils/api-client";
-
+import { clientGetUserAllPosts } from "../utils/api-client";
+import { useCRUDhooks } from "../utils/PostHooks";
 function TooltipButton({ label, highlight, onClick, icon, ...rest }) {
   const { isLoading, isError, error, run } = useAsync();
 
@@ -48,8 +43,6 @@ function TooltipButton({ label, highlight, onClick, icon, ...rest }) {
   );
 }
 function StatusButtons(props) {
-  const queryClient = useQueryClient();
-  //console.log(queryClient);
   const { data: listItems } = useQuery({
     queryKey: "list-items",
     queryFn: () =>
@@ -57,50 +50,15 @@ function StatusButtons(props) {
         (data) => data.data.data
       ),
   });
-  const { mutate: Create } = useMutation(
-    () =>
-      clientCreateReadingOrFinishedPosts({
-        user: props.user,
-        postId: props.postId,
-        post: props.post,
-      }),
-    {
-      onSettled: () => {
-        queryClient.invalidateQueries("list-items");
-        queryClient.invalidateQueries("targeted-post");
-        queryClient.invalidateQueries("user-List-items");
-      },
-    }
-  );
-  const { mutate: Update } = useMutation(
-    ({ finishDate }) =>
-      clientUpdateUserTargetedPost({
-        token: props.user.token,
-        postId: props.postId,
-        data: { finishDate },
-      }),
-    {
-      onSettled: () => {
-        queryClient.invalidateQueries("list-items");
-        queryClient.invalidateQueries("targeted-post");
-        queryClient.invalidateQueries("user-List-items");
-      },
-    }
-  );
-  const { mutate: Delete } = useMutation(
-    () =>
-      clientRemoveUserTargetedPost({
-        token: props.user.token,
-        postId: props.postId,
-      }),
-    {
-      onSettled: () => {
-        queryClient.invalidateQueries("list-items");
-        queryClient.invalidateQueries("targeted-post");
-        queryClient.invalidateQueries("user-List-items");
-      },
-    }
-  );
+  const { useMutationForCreate, useMutationForUpdate, useMutationForDelete } =
+    useCRUDhooks({
+      user: props.user,
+      postId: props.postId,
+      post: props.post,
+    });
+  const { mutate: Create } = useMutationForCreate();
+  const { mutate: Update } = useMutationForUpdate();
+  const { mutate: Delete } = useMutationForDelete();
 
   const listItem =
     listItems?.find((v) => v.post_id === parseInt(props.postId)) ?? null;

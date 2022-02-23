@@ -1,9 +1,12 @@
-import { useQuery } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import {
   client,
   clientFilter,
   clientGetUserAllPosts,
   clientGetPosts,
+  clientUpdateUserTargetedPost,
+  clientRemoveUserTargetedPost,
+  clientCreateReadingOrFinishedPosts,
 } from "./api-client";
 import postsPlaceholderSvg from "../assets/posts-placeholder.svg";
 const loadingPost = {
@@ -62,5 +65,56 @@ function usePost(user, postId) {
   });
   return targetedPost ?? loadingPost;
 }
+function useCRUDhooks({ user, postId, post }) {
+  const queryClient = useQueryClient();
+  const useInvalidateQueries = () => {
+    queryClient.invalidateQueries("list-items");
+    queryClient.invalidateQueries("targeted-post");
+    queryClient.invalidateQueries("user-List-items");
+  };
+  function useUpdateListItem() {
+    return useMutation(
+      (updates) =>
+        clientUpdateUserTargetedPost({
+          token: user.token,
+          postId: postId,
+          data: updates,
+        }),
+      {
+        onSettled: useInvalidateQueries,
+      }
+    );
+  }
+  function useRemoveListItem() {
+    return useMutation(
+      () =>
+        clientRemoveUserTargetedPost({
+          token: user.token,
+          postId: postId,
+        }),
+      {
+        onSettled: useInvalidateQueries,
+      }
+    );
+  }
+  function useCreateListItem() {
+    return useMutation(
+      () =>
+        clientCreateReadingOrFinishedPosts({
+          user: user,
+          postId: postId,
+          post: post,
+        }),
+      {
+        onSettled: useInvalidateQueries,
+      }
+    );
+  }
+  return {
+    useMutationForCreate: useCreateListItem,
+    useMutationForUpdate: useUpdateListItem,
+    useMutationForDelete: useRemoveListItem,
+  };
+}
 
-export { usePostSearch, useAllPosts, useUserPosts, usePost };
+export { usePostSearch, useAllPosts, useUserPosts, usePost, useCRUDhooks };

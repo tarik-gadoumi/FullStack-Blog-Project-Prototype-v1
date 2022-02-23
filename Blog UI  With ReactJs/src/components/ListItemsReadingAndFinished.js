@@ -1,17 +1,9 @@
-// import { useQuery } from "react-query";
-// import { clientGetUserAllPosts } from "../utils/api-client";
 import { useListItems } from "../utils/listItemshooks";
 import { PostsListUL } from "../components/lib";
 import { PostRow } from "./post-row";
 
 function ListItemsList({ user, noListItems, noFilteredListItems, callback }) {
-  // const { data: listItems } = useQuery({
-  //   queryKey: "user-List-items",
-  //   queryFn: () =>
-  //     clientGetUserAllPosts({ token: user.token }).then(
-  //       (data) => data.data.data
-  //     ),
-  // });
+
   const listItems = useListItems(user);
   const filteredListItems = listItems?.filter(callback);
 

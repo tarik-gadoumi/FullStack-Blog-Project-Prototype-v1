@@ -3,14 +3,12 @@
 import { jsx } from "@emotion/react";
 import * as React from "react";
 import { useParams } from "react-router";
-import { clientUpdateUserTargetedPost } from "../utils/api-client";
 import * as mq from "../styles/mq";
 import { StatusButtons } from "../components/status-buttons";
 import { Rating } from "../components/rating";
-import { useMutation, useQueryClient } from "react-query";
 import debounceFn from "debounce-fn";
 import { Textarea } from "../components/lib";
-import { useUserPosts, usePost } from "../utils/PostHooks";
+import { useUserPosts, usePost, useCRUDhooks } from "../utils/PostHooks";
 
 function PostScreen({ user }) {
   const { postId } = useParams();
@@ -87,22 +85,9 @@ function PostScreen({ user }) {
 }
 function NotesTextarea({ listItem, user }) {
   const { postId } = useParams();
-  const queryClient = useQueryClient();
-  const { mutate } = useMutation(
-    (updates) =>
-      clientUpdateUserTargetedPost({
-        token: user.token,
-        postId: postId,
-        data: updates,
-      }),
-    {
-      onSettled: () => {
-        queryClient.invalidateQueries("list-items");
-        queryClient.invalidateQueries("targeted-post");
-        queryClient.invalidateQueries("user-List-items");
-      },
-    }
-  );
+  const { useMutationForUpdate } = useCRUDhooks({ user, postId });
+  const { mutate } = useMutationForUpdate();
+
   const debouncedMutate = React.useMemo(
     () => debounceFn(mutate, { wait: 300 }),
     [mutate]

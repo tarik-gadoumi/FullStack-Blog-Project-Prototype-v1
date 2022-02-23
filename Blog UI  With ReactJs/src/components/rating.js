@@ -3,9 +3,7 @@
 import { jsx } from "@emotion/react";
 import * as React from "react";
 import { BsSuitHeartFill } from "react-icons/bs";
-
-import { useMutation, useQueryClient } from "react-query";
-import { clientUpdateUserTargetedPost } from "../utils/api-client";
+import { useCRUDhooks } from "../utils/PostHooks";
 
 const visuallyHiddenCSS = {
   border: "0",
@@ -20,21 +18,9 @@ const visuallyHiddenCSS = {
 
 function Rating({ listItem, user, postId }) {
   const [isTabbing, setIsTabbing] = React.useState(false);
-  const queryClient = useQueryClient();
 
-  const { mutate: update } = useMutation(
-    (ratingValue) =>
-      clientUpdateUserTargetedPost({
-        token: user.token,
-        postId: postId,
-        data: { rating: ratingValue },
-      }),
-    {
-      onSettled: () => {
-        queryClient.invalidateQueries("list-items");
-      },
-    }
-  );
+  const { useMutationForUpdate } = useCRUDhooks({ user, postId });
+  const { mutate: Update } = useMutationForUpdate();
 
   React.useEffect(() => {
     function handleKeyDown(event) {
@@ -60,7 +46,7 @@ function Rating({ listItem, user, postId }) {
           value={ratingValue}
           checked={ratingValue === listItem.rating}
           onChange={() => {
-            update(ratingValue);
+            Update({ rating: ratingValue });
           }}
           css={[
             visuallyHiddenCSS,
