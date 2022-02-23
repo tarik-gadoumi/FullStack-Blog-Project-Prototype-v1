@@ -28,7 +28,6 @@ async function isThereUser() {
 }
 function App() {
   const queryClient = useQueryClient();
-  //console.log(queryClient);
   const {
     data: user,
     error,
@@ -39,9 +38,7 @@ function App() {
     run,
     setData,
   } = useAsync();
-  // const  [user,setUser] = React.useState(null)
   React.useEffect(() => {
-    // isThereUser().then((u)=>setUser(u))
     run(isThereUser());
   }, [run]);
   const login = (form) => auth.login(form).then((u) => setData(u));

@@ -3,22 +3,14 @@
 import { jsx } from "@emotion/react";
 import { Link } from "react-router-dom";
 import { Rating } from "./rating";
-import { useQuery } from "react-query";
 import { StatusButtons } from "./status-buttons";
-import { clientGetUserAllPosts } from "../utils/api-client";
+import { useListItem } from "../utils/listItemshooks";
 import * as mq from "../styles/mq";
 import * as colors from "../styles/colors";
 
 function PostRow({ post, user }) {
   const { title, author, coverImageUrl, created_at, updated_at } = post;
-  const { data: listItems } = useQuery({
-    queryKey: "list-items",
-    queryFn: () =>
-      clientGetUserAllPosts({ token: user.token }).then(
-        (data) => data.data.data
-      ),
-  });
-  const listItem = listItems?.find((v) => v.post_id === post.id) ?? null;
+  const listItem = useListItem(user, post.id);
 
   const id = `post-row-post-${post.id}`;
   return (
