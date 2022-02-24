@@ -29,6 +29,7 @@ const Spinner = styled(FaSpinner)({
   animation: `${spin} 1s linear infinite`,
   fontSize: `130%`,
 });
+
 Spinner.defaultProps = {
   "aria-label": "loading",
 };
@@ -129,7 +130,26 @@ const errorMessageVariants = {
   stacked: { display: "block" },
   inline: { display: "inline-block" },
 };
-function ErrorMessage({ error, variant = "stacked", ...props }) {
+const itemEnter = keyframes` 
+from, 20%, 53%, 80%, to {
+  transform: translate3d(0,0,0);
+}
+
+40%, 43% {
+  transform: translate3d(0, -30px, 0);
+}
+
+70% {
+  transform: translate3d(0, -15px, 0);
+}
+
+90% {
+  transform: translate3d(0,-4px,0);
+}
+`;
+function ErrorMessag({ error, variant = "stacked", ...props }) {
+  console.log(error.message);
+
   return (
     <div
       role="alert"
@@ -139,15 +159,26 @@ function ErrorMessage({ error, variant = "stacked", ...props }) {
       <span>There was an error: </span>
       <pre
         css={[
-          { whiteSpace: "break-spaces", margin: "0", marginBottom: -5 },
+          {
+            whiteSpace: "break-spaces",
+            margin: "0",
+            background: "#270F09",
+            color: "gold",
+          },
           errorMessageVariants[variant],
         ]}
       >
-        {error.message}
+        {error.response?.data.message ||
+          error.message ||
+          error.email ||
+          error.password}
       </pre>
     </div>
   );
 }
+const ErrorMessage = styled(ErrorMessag)({
+  animation: `${itemEnter} 1s ease`,
+});
 function FullPageErrorFallback({ error }) {
   return (
     <div
@@ -161,6 +192,7 @@ function FullPageErrorFallback({ error }) {
         alignItems: "center",
       }}
     >
+      {" "}
       <p>Uh oh... There's a problem. Try refreshing the app.</p>
       <pre>{error.message}</pre>
     </div>
