@@ -67,10 +67,12 @@ function usePost(user, postId) {
 }
 function useCRUDhooks({ user, postId, post }) {
   const queryClient = useQueryClient();
-  const useInvalidateQueries = () => {
-    queryClient.invalidateQueries("list-items");
-    queryClient.invalidateQueries("targeted-post");
-    queryClient.invalidateQueries("user-List-items");
+  const defaultBehavior = {
+    onSettled: () => {
+      queryClient.invalidateQueries("list-items");
+      queryClient.invalidateQueries("targeted-post");
+      queryClient.invalidateQueries("user-List-items");
+    },
   };
   function useUpdateListItem() {
     return useMutation(
@@ -80,9 +82,7 @@ function useCRUDhooks({ user, postId, post }) {
           postId: postId,
           data: updates,
         }),
-      {
-        onSettled: useInvalidateQueries,
-      }
+      defaultBehavior
     );
   }
   function useRemoveListItem() {
@@ -92,9 +92,7 @@ function useCRUDhooks({ user, postId, post }) {
           token: user.token,
           postId: postId,
         }),
-      {
-        onSettled: useInvalidateQueries,
-      }
+      defaultBehavior
     );
   }
   function useCreateListItem() {
@@ -105,9 +103,7 @@ function useCRUDhooks({ user, postId, post }) {
           postId: postId,
           post: post,
         }),
-      {
-        onSettled: useInvalidateQueries,
-      }
+      defaultBehavior
     );
   }
   return {

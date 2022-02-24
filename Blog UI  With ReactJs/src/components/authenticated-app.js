@@ -2,7 +2,8 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 import * as React from "react";
-import { Button } from "./lib";
+import { Button, ErrorMessage, FullPageErrorFallback } from "./lib";
+import { ErrorBoundary } from "react-error-boundary";
 import * as mq from "../styles/mq";
 import { DiscoverPostsScreen } from "./DiscoverPosts";
 import {
@@ -38,12 +39,26 @@ function useFirstRenderSettings() {
     keyExist,
   };
 }
-
+function ErrorFallback({ error }) {
+  return (
+    <ErrorMessage
+      error={error}
+      css={{
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    />
+  );
+}
 function AuthenticatedApp({ user, logout }) {
   const { history } = useFirstRenderSettings();
 
   return (
-    <React.Fragment>
+    <ErrorBoundary FallbackComponent={FullPageErrorFallback}>
+      {" "}
       <div
         css={{
           display: "flex",
@@ -99,10 +114,12 @@ function AuthenticatedApp({ user, logout }) {
           <Nav />
         </div>
         <main css={{ width: "100%" }}>
-          <AppRoutes user={user} />
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            <AppRoutes user={user} />
+          </ErrorBoundary>
         </main>
       </div>
-    </React.Fragment>
+    </ErrorBoundary>
   );
 }
 function NavLink(props) {

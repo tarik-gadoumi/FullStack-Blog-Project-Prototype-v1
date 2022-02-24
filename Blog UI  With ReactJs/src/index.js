@@ -9,9 +9,11 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
+      retry: false,
     },
   },
 });
+
 ReactDOM.render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
