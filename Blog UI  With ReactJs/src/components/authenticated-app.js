@@ -62,6 +62,7 @@ function ErrorFallback({ error, resetErrorBoundary }) {
           width: "13em",
           height: "3em",
           background: "rgb(93, 211, 158)",
+          fontSize: "1em",
           cursor: "pointer",
           ":hover": {
             background: "lightgreen",
@@ -72,7 +73,7 @@ function ErrorFallback({ error, resetErrorBoundary }) {
           history("/Discover");
         }}
       >
-        Try again
+        Click here or refresh the App !
       </button>
     </>
   );

@@ -36,6 +36,7 @@ function PostRow({ post, user }) {
           color: colors.text,
           padding: "1.25em",
           borderRadius: "3px",
+          textDecoration: "none",
           ":hover,:focus": {
             textDecoration: "none",
             boxShadow: "0 5px 15px -5px rgba(0,0,0,.08)",
