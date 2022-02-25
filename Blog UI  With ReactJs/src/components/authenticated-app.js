@@ -39,18 +39,42 @@ function useFirstRenderSettings() {
     keyExist,
   };
 }
-function ErrorFallback({ error }) {
+function ErrorFallback({ error, resetErrorBoundary }) {
+  const { history } = useFirstRenderSettings();
+
   return (
-    <ErrorMessage
-      error={error}
-      css={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    />
+    <>
+      <ErrorMessage
+        error={error}
+        css={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          fontSize: "3em",
+          border: "2px red solid ",
+          background: "#270F09",
+        }}
+      />
+      <button
+        css={{
+          width: "13em",
+          height: "3em",
+          background: "rgb(93, 211, 158)",
+          cursor: "pointer",
+          ":hover": {
+            background: "lightgreen",
+          },
+        }}
+        onClick={() => {
+          resetErrorBoundary();
+          history("/Discover");
+        }}
+      >
+        Try again
+      </button>
+    </>
   );
 }
 function AuthenticatedApp({ user, logout }) {
